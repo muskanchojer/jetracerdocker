@@ -1,0 +1,83 @@
+# VSLAM Configuration for JetRacer
+# Visual-Inertial SLAM using pycuvslam with mono camera + IMU
+
+vslam:
+  # Camera settings (from existing calibration)
+  camera:
+    width: 640
+    height: 480
+    fps: 30
+    device: "/dev/video0"
+    topic: "/usb_cam/image_raw"
+    
+    # Intrinsics from calibDB.net calibration
+    # Camera: USB2.0 PC CAMERA (640x480)
+    fx: 1415.5729588019103
+    fy: 1422.8250226429589
+    cx: 324.16285803470964
+    cy: 173.24600417231667
+    
+    # Brown distortion model (5 coefficients: k1, k2, p1, p2, k3)
+    k1: -0.026174572536851008
+    k2: 0.40714142485109317
+    p1: -0.0036592982405418196
+    p2: -0.0007949641670327825
+    k3: -3.126531378048296
+  
+  # IMU settings
+  imu:
+    frequency: 200  # Hz
+    topic: "/imu"
+    
+    # Noise parameters (to be calibrated using calibrate_imu_noise.py)
+    # Default values - run calibration script for accurate measurements
+    gyroscope_noise_density: 1.6968e-04  # rad/s/√Hz
+    gyroscope_random_walk: 1.9393e-05    # rad/s²/√Hz
+    accelerometer_noise_density: 2.0e-03  # m/s²/√Hz
+    accelerometer_random_walk: 3.0e-03    # m/s³/√Hz
+  
+  # IMU-Camera transformation (to be calibrated using measure_imu_camera.py)
+  # Transformation from IMU frame to camera frame
+  T_cam_imu:
+    # 4x4 transformation matrix: camera frame from IMU frame
+    # Default: Identity (IMU and camera aligned)
+    # Update after running measure_imu_camera.py
+    rotation: [1, 0, 0, 0, 1, 0, 0, 0, 1]  # 3x3 row-major rotation matrix
+    translation: [0, 0, 0]  # [x, y, z] in meters
+  
+  # Tracker configuration
+  tracker:
+    async_sba: true  # Async bundle adjustment for better performance
+    max_frame_delta_s: 1.0  # Max time between frames (seconds)
+    enable_observations_export: true
+    enable_final_landmarks_export: true
+    
+  # ROS output
+  ros:
+    publish_odom: true
+    odom_topic: "/vslam/odom"
+    odom_frame_id: "vslam_odom"
+    child_frame_id: "base_link"
+    publish_rate: 30  # Hz
+    
+  # Visualization
+  visualization:
+    enable_rerun: true
+    rerun_app_id: "jetracer_vslam"
+    show_features: true
+    show_trajectory: true
+    feature_color_by_id: true
+    trajectory_max_points: 1000
+    
+  # Performance settings
+  performance:
+    skip_frames: 1  # Process every Nth frame (1 = no skip, 2 = every other frame)
+    max_features_per_frame: 200
+    min_features_per_frame: 50
+    
+  # Data logging
+  logging:
+    save_trajectory: true
+    trajectory_file: "logs/vslam_trajectory.txt"
+    log_statistics: true
+    statistics_interval: 10  # seconds
