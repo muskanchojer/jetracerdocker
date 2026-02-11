@@ -23,6 +23,7 @@ def print_banner():
 ║  🤖  Autonomous Mode  - AI vision (free roam)            ║
 ║  🎯  Goal-Based Mode  - Navigation + Vision fusion       ║
 ║  🏠  Homing Mode      - Auto return to start + recovery  ║
+║  🗺️  VSLAM Mode       - Visual-Inertial SLAM             ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
     """
@@ -35,11 +36,12 @@ def select_mode():
     print("  2. Autonomous (AI Vision - Free Roam)")
     print("  3. Goal-Based (Navigation + Vision)")
     print("  4. Homing (Autonomous + Return to Start)")
-    print("  5. Exit")
+    print("  5. VSLAM Mode (Visual-Inertial SLAM)")
+    print("  6. Exit")
     
     while True:
         try:
-            choice = input("\nEnter choice (1-5): ").strip()
+            choice = input("\nEnter choice (1-6): ").strip()
             
             if choice == '1':
                 return 'manual'
@@ -50,9 +52,11 @@ def select_mode():
             elif choice == '4':
                 return 'homing'
             elif choice == '5':
+                return 'vslam'
+            elif choice == '6':
                 return 'exit'
             else:
-                print("Invalid choice. Please enter 1-5.")
+                print("Invalid choice. Please enter 1-6.")
         
         except KeyboardInterrupt:
             print("\n\nExiting...")
@@ -263,12 +267,46 @@ def run_homing_mode():
         traceback.print_exc()
         return False
 
+def run_vslam_mode():
+    """Run Visual-Inertial SLAM mode"""
+    print("\n" + "="*60)
+    print("Starting VSLAM Mode (Visual-Inertial SLAM)")
+    print("="*60 + "\n")
+    
+    print("🗺️  VSLAM Mode Features:")
+    print("   - Visual-Inertial Odometry with pycuvslam")
+    print("   - Real-time 3D mapping and localization")
+    print("   - IMU + Camera sensor fusion")
+    print("   - Rerun 3D visualization (if enabled)")
+    print("   - Trajectory logging and export\n")
+    
+    try:
+        from scripts.vslam_control import VSLAMController
+        
+        controller = VSLAMController()
+        return controller.run()
+    
+    except ImportError as e:
+        print(f"❌ Failed to import VSLAM controller: {e}")
+        print("\nMake sure pycuvslam is installed:")
+        print("  Follow installation guide in docs/VSLAM_SETUP.md")
+        print("\nRequired packages:")
+        print("  - pycuvslam (install separately)")
+        print("  - rerun-sdk (pip install rerun-sdk)")
+        print("  - pyyaml (pip install pyyaml)")
+        return False
+    except Exception as e:
+        print(f"❌ Error in VSLAM mode: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
 def main():
     """Main entry point"""
     import argparse
     
     parser = argparse.ArgumentParser(description='JetRacer Control System')
-    parser.add_argument('--mode', choices=['manual', 'autonomous', 'goal_based', 'homing'], 
+    parser.add_argument('--mode', choices=['manual', 'autonomous', 'goal_based', 'homing', 'vslam'], 
                        help='Control mode (skip interactive selection)')
     parser.add_argument('--no-check', action='store_true',
                        help='Skip Docker check')
@@ -314,6 +352,10 @@ def main():
     
     elif mode == 'homing':
         success = run_homing_mode()
+        return 0 if success else 1
+    
+    elif mode == 'vslam':
+        success = run_vslam_mode()
         return 0 if success else 1
     
     else:

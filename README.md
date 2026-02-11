@@ -24,6 +24,9 @@ It doesn't recognise the places just keeps moving mindlessly like a drunken man.
 
 - ✅ **Manual Control**: Direct keyboard control via ROS topics
 - ✅ **Autonomous Mode**: AI navigation using trained TinyNet policy
+- ✅ **Goal-Based Navigation**: Waypoint navigation with vision fusion
+- ✅ **Homing Mode**: Autonomous return-to-start with dead reckoning
+- ✅ **VSLAM Mode**: Visual-Inertial SLAM with pycuvslam (NEW!)
 - ✅ **YOLOv8 Vision**: Real-time feature extraction with tinygrad
 - ✅ **GPU Acceleration**: CUDA support for real-time performance
 - ✅ **Docker Integration**: ROS Noetic in containerized environment

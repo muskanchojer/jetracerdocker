@@ -27,6 +27,13 @@ av>=10.0.0          # PyAV for video encoding/decoding
 # Progress bars and utilities
 tqdm>=4.60.0
 
+# VSLAM dependencies
+rerun-sdk>=0.15.0   # 3D visualization for VSLAM mode
+scipy>=1.10.0       # Scientific computing (for Allan variance in IMU calibration)
+
+# Note: pycuvslam must be installed separately (not available via pip)
+# See docs/VSLAM_SETUP.md for installation instructions
+
 # Note: Some packages may need system dependencies on Ubuntu 22.04:
 # sudo apt-get install -y python3-opencv libopencv-dev
 # sudo apt-get install -y ffmpeg libavcodec-dev libavformat-dev libswscale-dev
