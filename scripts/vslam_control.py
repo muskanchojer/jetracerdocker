@@ -271,6 +271,9 @@ class VSLAMController:
     
     def _print_statistics(self):
         """Print current statistics"""
+        if not self.start_time:
+            return
+        
         runtime = time.time() - self.start_time
         
         # Get tracking stats

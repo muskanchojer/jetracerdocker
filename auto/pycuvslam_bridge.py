@@ -103,16 +103,16 @@ class PyCuVSLAMBridge:
             self.logger.info(f"  Translation: {translation}")
             
             # Create tracker configuration
-            config = self.pycuvslam.Configuration()
-            config.enable_observations_export = tracker_config.get('enable_observations_export', True)
-            config.enable_landmarks_export = tracker_config.get('enable_final_landmarks_export', True)
+            tracker_config_obj = self.pycuvslam.Configuration()
+            tracker_config_obj.enable_observations_export = tracker_config.get('enable_observations_export', True)
+            tracker_config_obj.enable_landmarks_export = tracker_config.get('enable_final_landmarks_export', True)
             
             # Initialize tracker
             self.tracker = self.pycuvslam.Tracker(
                 camera_intrinsics=intrinsics,
                 imu_calibration=imu_calib,
                 T_camera_imu=T_cam_imu,
-                configuration=config
+                configuration=tracker_config_obj
             )
             
             self.logger.info("✅ pycuvslam tracker initialized successfully")

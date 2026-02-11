@@ -98,7 +98,7 @@ class VSLAMROSBridge:
             try:
                 self.camera_process.terminate()
                 self.camera_process.wait(timeout=1.0)
-            except:
+            except Exception:
                 self.camera_process.kill()
         
         # Stop IMU process
@@ -106,7 +106,7 @@ class VSLAMROSBridge:
             try:
                 self.imu_process.terminate()
                 self.imu_process.wait(timeout=1.0)
-            except:
+            except Exception:
                 self.imu_process.kill()
         
         # Wait for threads

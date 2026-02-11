@@ -95,12 +95,13 @@ def measure_transform():
     print("  Example: If camera is 5cm forward, 2cm right, 1cm up from IMU")
     print("           Enter: 0.05, 0.02, 0.01\n")
     
+    tx, ty, tz = 0.0, 0.0, 0.0
     try:
         tx = float(input("  X offset (forward, in meters): ").strip() or "0.0")
         ty = float(input("  Y offset (left, in meters): ").strip() or "0.0")
         tz = float(input("  Z offset (up, in meters): ").strip() or "0.0")
-    except ValueError:
-        print("\n⚠️  Invalid input, using default: [0, 0, 0]")
+    except ValueError as e:
+        print(f"\n⚠️  Invalid input: {e}, using default: [0, 0, 0]")
         tx, ty, tz = 0.0, 0.0, 0.0
     
     translation = [tx, ty, tz]
@@ -119,12 +120,13 @@ def measure_transform():
     print("  4. Camera tilted down 30° - Use [30, 0, 0]")
     print("\nEnter Euler angles (in degrees):\n")
     
+    roll, pitch, yaw = 0.0, 0.0, 0.0
     try:
         roll = float(input("  Roll (rotation around forward axis, degrees): ").strip() or "0.0")
         pitch = float(input("  Pitch (rotation around left axis, degrees): ").strip() or "0.0")
         yaw = float(input("  Yaw (rotation around up axis, degrees): ").strip() or "0.0")
-    except ValueError:
-        print("\n⚠️  Invalid input, using default: [0, 0, 0]")
+    except ValueError as e:
+        print(f"\n⚠️  Invalid input: {e}, using default: [0, 0, 0]")
         roll, pitch, yaw = 0.0, 0.0, 0.0
     
     # Convert to radians
